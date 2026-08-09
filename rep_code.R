@@ -751,8 +751,8 @@ summary(ivreg(ntl_ch~bombed | psc,data=dat_post))
 library(np)
 
 bw0   <- npregbw(I(ntl_ch/max(dat_post$ntl_pre[which(dat_post$bombed==1)])) ~ psc , data=dat_post, regtype="ll", bwmethod="cv.aic")
-Y.np0 <- npreg(bws = bw0, gradient=TRUE)
-plot(Y.np0, plot.errors.method="bootstrap", gradient=TRUE,
+Y.np0 <- npreg(bws = bw0, gradients=TRUE)
+plot(Y.np0, plot.errors.method="bootstrap", gradients=TRUE,
      ylab="MTE, normalised by pre-conflict peak", xlab="Predicted probability of being bombed")
 # The MTE is valid over the region of common support
 mte <- Y.np0$grad*CS_dummy
@@ -890,9 +890,9 @@ ntl_m <- rep(0,length(files))
 
 for (i in 1:length(files)){ 
   rast_name <- paste("NTL_past_rasters_for_GDP/",files[i],sep="")
-  dat <- read.csv(rast_name)
-  dat$VALUE[which(dat$VALUE==65535)] <- NA ### in the NASA data 65535 = NA. Remove or skews the averages!
-  ntl_m[i] <- mean(dat$VALUE,na.rm=T)
+  dat_rast <- read.csv(rast_name)
+  dat$VALUE[which(dat_rast$VALUE==65535)] <- NA ### in the NASA data 65535 = NA. Remove or skews the averages!
+  ntl_m[i] <- mean(dat_rast$VALUE,na.rm=T)
 }
 # 
 library(openxlsx) 
